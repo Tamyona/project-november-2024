@@ -1,0 +1,59 @@
+- name: Add the user prometheus
+  ansible.builtin.user:
+    name: prometheus
+    shell: /bin/false
+    system: true
+    create_home: false
+
+- name: Download prometheus
+  ansible.builtin.get_url:
+    url: https://github.com/prometheus/prometheus/releases/download/v2.45.0/prometheus-2.45.0.linux-amd64.tar.gz
+    dest: /tmp/prometheus.tar.gz
+
+- name: Unarchive a file that is already on the remote machine
+  ansible.builtin.unarchive:
+    src: /tmp/prometheus.tar.gz
+    dest: /tmp
+    remote_src: yes
+
+- name: Change file ownership, group and permissions
+  ansible.builtin.file:
+    path: "{{ item }}"
+    owner: prometheus
+    group: prometheus
+    mode: '0755'
+    state: directory
+  loop:
+    - /data
+    - /etc/prometheus
+
+- name: Copy binaries
+  ansible.builtin.copy:
+    src: /tmp/prometheus-2.45.0.linux-amd64/{{ item }}
+    dest: /usr/local/bin
+    remote_src: yes
+    mode: '0755'
+  loop:
+    - prometheus
+    - promtool
+
+- name: Copy files
+  ansible.builtin.copy:
+    src: /tmp/prometheus-2.45.0.linux-amd64/{{ item }}
+    dest: /etc/prometheus
+    remote_src: yes
+  loop:
+    - consoles
+    - console_libraries
+    - prometheus.yml
+
+- name: Template a file to /etc/systemd/system
+  ansible.builtin.template:
+    src: prometheus/templates/prometheus.service.j2
+    dest: /etc/systemd/system/prometheus.service
+
+- name: Make sure a service unit is running
+  ansible.builtin.systemd:
+    state: started
+    name: prometheus
+    enabled: yes

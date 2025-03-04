@@ -1,6 +1,7 @@
 #!/bin/bash
 # Second way of creating Prmetheus and Grafana and establishimg connection between them
 # In non-declarative way using .sh script
+# To use this method enable user_data in ec2.tf file in aws_instance block
 
 #1. Create Prometheus user
 sudo useradd --system --no-create-home --shell /bin/false prometheus

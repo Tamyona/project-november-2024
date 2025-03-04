@@ -5,16 +5,16 @@ resource "aws_security_group" "allow_tls" {
 
   ingress {
     description      = "TLS from VPC"
-    from_port        = 9090
-    to_port          = 9090
+    from_port        = 9090               # promethes port
+    to_port          = 9090               # promethes port
     protocol         = "tcp"
     cidr_blocks      = ["0.0.0.0/0"]
   }
 
     ingress {
     description      = "TLS from VPC"
-    from_port        = 3000
-    to_port          = 3000
+    from_port        = 3000               # grafana port
+    to_port          = 3000               # grafana port
     protocol         = "tcp"
     cidr_blocks      = ["0.0.0.0/0"]
   }

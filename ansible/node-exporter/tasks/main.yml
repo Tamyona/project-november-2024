@@ -1,3 +1,6 @@
+# Follow Documentation
+# Node-exporter accepts metrcis and transfers to Prometheus Query Language
+
 - name: Add the user node_exporter
   ansible.builtin.user:
     name: node_exporter
@@ -34,6 +37,7 @@
     name: node_exporter
     enabled: yes
 
+# Add a block in an existing file - INFO >> FILE
 - name: Update file prometheus.yml
   ansible.builtin.blockinfile:
     path: /etc/prometheus/prometheus.yml
@@ -42,11 +46,12 @@
           static_configs:
             - targets: ["localhost:9100"]
 
+# Prometheus file needs to have correct indentations
 - name: Fix indentation
   ansible.builtin.replace:
     path: /etc/prometheus/prometheus.yml
-    regexp: "^(- job_name: 'node_export')"
-    replace: '  \1'
+    regexp: "^(- job_name: 'node_export')"        # whatever starts with "job_name: 'node_export'"
+    replace: '  \1'                               # indentation
 
 
 

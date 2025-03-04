@@ -26,13 +26,14 @@ resource "aws_instance" "web" {
   subnet_id               = aws_subnet.main.id
   vpc_security_group_ids  = [aws_security_group.allow_tls.id]
 
-  # user_data = file("prometheus.sh")
+  user_data = file("prometheus.sh")
 
-  # tags = {
-  #   Name = "group-5"
-  # }
+  tags = {
+    Name = "group-5"
+  }
 }
 
+# we need output to get public ip and provide in ansible playbooks
 output ec2 {
     value = aws_instance.web.public_ip
 }

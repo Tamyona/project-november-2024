@@ -1,14 +1,14 @@
+# Follow all steps in documentation
+
 - name: Add the user prometheus
   ansible.builtin.user:
     name: prometheus
     shell: /bin/false
-    system: true
-    create_home: false
 
 - name: Download prometheus
   ansible.builtin.get_url:
     url: https://github.com/prometheus/prometheus/releases/download/v2.45.0/prometheus-2.45.0.linux-amd64.tar.gz
-    dest: /tmp/prometheus.tar.gz
+    dest: /tmp/prometheus.tar.gz      # provide your meaningful name
 
 - name: Unarchive a file that is already on the remote machine
   ansible.builtin.unarchive:

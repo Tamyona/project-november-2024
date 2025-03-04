@@ -20,11 +20,17 @@ resource "aws_key_pair" "deployer" {
 }
 
 resource "aws_instance" "web" {
-  ami           = data.aws_ami.ubuntu.id
-  key_name = aws_key_pair.deployer.key_name
-  instance_type = var.instance_type
-  subnet_id = aws_subnet.main.id
-  vpc_security_group_ids = [aws_security_group.allow_tls.id]
+  ami                     = data.aws_ami.ubuntu.id
+  key_name                = aws_key_pair.deployer.key_name
+  instance_type           = var.instance_type
+  subnet_id               = aws_subnet.main.id
+  vpc_security_group_ids  = [aws_security_group.allow_tls.id]
+
+  # user_data = file("prometheus.sh")
+
+  # tags = {
+  #   Name = "group-5"
+  # }
 }
 
 output ec2 {
